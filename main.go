@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 
+	"gin-rest-api/handlers"
 	"gin-rest-api/models"
 )
 
@@ -11,12 +12,12 @@ func main() {
 
 	models.ConnectDB()
 
-	statusHandler := func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"status": "OK",
-		})
-	}
+	router.GET("/status", handlers.StatusHandler)
 
-	router.GET("/status", statusHandler)
+	router.GET("/books", handlers.GetAllBooks)
+	router.GET("/book/:id", handlers.GetBook)
+	router.POST("/book", handlers.AddBook)
+	router.PATCH("/book/:id", handlers.UpdateBook)
+
 	router.Run(":4000")
 }
