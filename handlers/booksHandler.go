@@ -76,3 +76,16 @@ func UpdateBook(c *gin.Context) {
 	models.DB.Model(&book).Updates(models.Book{Title: input.Title, Author: input.Author})
 	c.JSON(http.StatusOK, gin.H{"data": book})
 }
+
+// DELETE /book/:id
+// Delete a book
+func DeleteBook(c *gin.Context) {
+	//check if the book exists
+	var book models.Book
+	if err := models.DB.Where("id = ?", c.Param("id")).First(&book).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "book not found"})
+		return
+	}
+
+	models.DB.Delete(&book)
+}
